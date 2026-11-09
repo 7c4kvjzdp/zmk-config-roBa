@@ -74,6 +74,16 @@
             #binding-cells = <2>;
             tapping-term-ms = <200>;
         };
+
+        lt_mkp: lt_mkp {
+            compatible = "zmk,behavior-hold-tap";
+            display-name = "Layer-Tap Mouse";
+            bindings = <&mo>, <&mkp>;
+
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+        };
     };
 
     keymap {
@@ -84,7 +94,7 @@
 &kp Q             &kp W  &kp E         &kp R                        &kp T        &kp LCTRL                          &kp DEL        &kp Y        &kp U  &lt 5 I    &kp O    &kp P
 &kp A             &kp S  &kp D         &kp F                        &kp G        &kp LS(LG(S))                      &kp MINUS      &kp H        &kp J  &kp K      &kp L    &kp SQT
 &mt LEFT_SHIFT Z  &kp X  &kp C         &kp V                        &kp B        &kp COLON                          &kp SEMICOLON  &kp N        &kp M  &kp COMMA  &kp DOT  &kp SLASH
-                         &kp LEFT_ALT  &lt_to_layer_0 6 INT_HENKAN  &lt 2 SPACE  &lt_to_layer_0 3 INT_MUHENKAN      &kp BACKSPACE  &lt 1 ENTER
+                         &kp LEFT_ALT  &lt_to_layer_0 6 INT_HENKAN  &lt_mkp 5 MB3  &lt_to_layer_0 3 INT_MUHENKAN      &kp BACKSPACE  &lt 1 ENTER
             >;
 
             sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;

@@ -3,6 +3,53 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
 
+// ---- 日本語配列（JIS）用の読み替え ------------------------------------------
+// kot149/zmk-layout-shift で &kp を差し替え、US 配列のつもりで指定したキーを
+// JIS 配列の PC 向けのキーに読み替えて送る（Studio で割り当てたキーにも効く）。
+#include <layout_shift_kp_override.dtsi>
+
+// Studio に保存済みの割り当ては behavior のデバイス名で &kp を参照している。
+// override が付ける label を消し、デバイス名を元の "key_press" のままにする。
+&kp {
+    /delete-property/ label;
+};
+
+// key press 系の実体は 1 つだけにする（ドライバが instance 0 しか作らないため）
+/delete-node/ &mtls;
+/delete-node/ &kpls;
+
+#define JIS_OPT (LAYOUT_SHIFT_OPTIONAL_CTRL | LAYOUT_SHIFT_OPTIONAL_ALT | LAYOUT_SHIFT_OPTIONAL_GUI)
+
+/ {
+    // 同梱の US->JIS マップから GRAVE（JIS の半角/全角）だけ外したもの。
+    // 起動時に常に有効化する（src/jis_default_on.c）。切り替えキーは置かない。
+    jis_map: jis_map {
+        compatible = "zmk,layout-shift-map";
+        mappings = <
+            EQUAL             UNDERSCORE        JIS_OPT
+            CARET             EQUAL             JIS_OPT
+            TILDE             PLUS              JIS_OPT
+            AT_SIGN           LEFT_BRACKET      JIS_OPT
+            LEFT_BRACKET      RIGHT_BRACKET     JIS_OPT
+            RIGHT_BRACKET     BACKSLASH         JIS_OPT
+            LEFT_BRACE        RIGHT_BRACE       JIS_OPT
+            RIGHT_BRACE       PIPE              JIS_OPT
+            PLUS              COLON             JIS_OPT
+            COLON             SINGLE_QUOTE      JIS_OPT
+            ASTERISK          DOUBLE_QUOTES     JIS_OPT
+            DOUBLE_QUOTES     AT_SIGN           JIS_OPT
+            AMPERSAND         CARET             JIS_OPT
+            SINGLE_QUOTE      AMPERSAND         JIS_OPT
+            LEFT_PARENTHESIS  ASTERISK          JIS_OPT
+            RIGHT_PARENTHESIS LEFT_PARENTHESIS  JIS_OPT
+            UNDERSCORE        LS(0x87)          JIS_OPT
+            BACKSLASH         0x89              JIS_OPT
+            PIPE              LS(0x89)          JIS_OPT
+        >;
+    };
+};
+// -----------------------------------------------------------------------------
+
 &mt {
     flavor = "balanced";
     quick-tap-ms = <0>;
